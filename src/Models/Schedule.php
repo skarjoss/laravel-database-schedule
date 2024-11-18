@@ -117,7 +117,8 @@ class Schedule extends Model
             $option = '--' . $option;
             if (is_array($value)) {
                 if (isset($value["type"]) && $value['type'] === 'function') {
-                    $options[$option] = (string)$value['value']();
+                    //$options[$option] = (string)$value['value']();
+                    eval('$options[$option] = (string) ' .$value['value']);
                 } else {
                     $options[$option] = $value['value'];
                 }
