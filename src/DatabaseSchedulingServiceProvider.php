@@ -7,6 +7,7 @@ use RobersonFaria\DatabaseSchedule\Console\Commands\PhpUnitTestJobCommand;
 use RobersonFaria\DatabaseSchedule\View\Helpers;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 use RobersonFaria\DatabaseSchedule\Observer\ScheduleObserver;
 use Illuminate\Console\Scheduling\Schedule as BaseSchedule;
@@ -63,6 +64,9 @@ class DatabaseSchedulingServiceProvider extends DatabaseScheduleApplicationServi
         }
 
         $this->app->resolving(BaseSchedule::class, function ($schedule) {
+            if (!Schema::hasTable('migrations')) {
+                return $schedule;
+            }
             $schedule = app(Schedule::class, ['schedule' => $schedule]);
             return $schedule->execute();
         });
