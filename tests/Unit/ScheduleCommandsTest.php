@@ -34,7 +34,7 @@ class ScheduleCommandsTest extends TestCase
 
     public function testRunInspireCommand()
     {
-        factory(Schedule::class)
+        Schedule::factory()
             ->create([
                 'command' => 'inspire'
             ]);
@@ -53,7 +53,7 @@ class ScheduleCommandsTest extends TestCase
 
     public function testRunInspireWithArguments()
     {
-        factory(Schedule::class)
+        Schedule::factory()
             ->create([
                 'command' => 'inspire',
                 'params' => [
@@ -74,7 +74,7 @@ class ScheduleCommandsTest extends TestCase
 
     public function testRunInspireWithOptionalArguments()
     {
-        factory(Schedule::class)
+        Schedule::factory()
             ->create([
                 'command' => 'inspire',
                 'params' => [
@@ -95,7 +95,7 @@ class ScheduleCommandsTest extends TestCase
 
     public function testRunInspireWithOptionsBoolean()
     {
-        factory(Schedule::class)
+        Schedule::factory()
             ->create([
                 'command' => 'inspire',
                 'options' => [

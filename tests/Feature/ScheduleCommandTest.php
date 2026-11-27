@@ -10,7 +10,7 @@ class ScheduleCommandTest extends TestCase
 
     public function testInspireTestCommand()
     {
-        $task = factory(Schedule::class)
+        $task = Schedule::factory()
             ->create([
                 'command' => 'inspire'
             ]);
@@ -28,7 +28,7 @@ class ScheduleCommandTest extends TestCase
 
     public function testCommandWithRequiredArgument()
     {
-        $task = factory(Schedule::class)
+        $task = Schedule::factory()
             ->create([
                 'command' => 'phpunit:test',
                 'params' => [
@@ -61,7 +61,7 @@ class ScheduleCommandTest extends TestCase
 
     public function testCommandWithOptionalArgument()
     {
-        $task = factory(Schedule::class)
+        $task = Schedule::factory()
             ->create([
                 'command' => 'phpunit:test',
                 'params' => [
@@ -103,7 +103,7 @@ class ScheduleCommandTest extends TestCase
 
     public function testCommandWithFunctionTypeArgument()
     {
-        $task = factory(Schedule::class)
+        $task = Schedule::factory()
             ->create([
                 'command' => 'phpunit:test',
                 'params' => [

@@ -3,12 +3,15 @@
 namespace RobersonFaria\DatabaseSchedule\Models;
 
 use Illuminate\Console\Scheduling\ManagesFrequencies;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Config;
+use RobersonFaria\DatabaseSchedule\Database\Factories\ScheduleFactory;
 
 class Schedule extends Model
 {
+    use HasFactory;
     use ManagesFrequencies;
     use SoftDeletes;
 
@@ -72,6 +75,11 @@ class Schedule extends Model
         parent::__construct($attributes);
 
         $this->table = Config::get('database-schedule.table.schedules', 'schedules');
+    }
+
+    protected static function newFactory(): ScheduleFactory
+    {
+        return ScheduleFactory::new();
     }
 
     public function histories()

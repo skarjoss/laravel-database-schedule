@@ -9,7 +9,7 @@ class PhpUnitDatabaseTest extends TestCase
 {
     public function testDatabaseAndFactoryWorks()
     {
-        factory(Schedule::class, 2)->create();
+        Schedule::factory()->count(2)->create();
 
         $this->assertEquals(2, Schedule::all()->count());
     }
