@@ -4,38 +4,46 @@ on:
   pull_request:
     paths:
       - "**.php"
+      - "composer.json"
       - "phpcs.xml"
-      - ".github/workflows/phpcs.yml"
+      - "phpunit.xml"
+      - ".github/workflows/ci.yml"
   push:
 
 jobs:
   phpcs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0 # important!
+      - uses: actions/checkout@v4
 
-      # we may use whatever way to install phpcs, just specify the path on the next step
-      # however, curl seems to be the fastest
-      - name: Install PHP_CodeSniffer
-        run: |
-          curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
-          php phpcs.phar --version
-
-      - uses: tinovyatkin/action-php-codesniffer@v1
+      - uses: shivammathur/setup-php@v2
         with:
-          files: "**.php" # you may customize glob as needed
-          phpcs_path: php phpcs.phar
-          standard: phpcs.xml
+          php-version: "8.4"
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction
+
+      - name: Run PHP_CodeSniffer
+        run: vendor/bin/phpcs
 
   build-test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ["8.3", "8.4"]
+
     steps:
-      - uses: actions/checkout@v2
-      - uses: php-actions/composer@v5 # or alternative dependency management
-      - uses: php-actions/phpunit@v3
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
         with:
-          bootstrap: vendor/autoload.php
-          configuration: phpunit.xml
-          args: --coverage-text
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      - name: Resolve dependencies
+        run: composer update --prefer-dist --no-interaction
+
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit

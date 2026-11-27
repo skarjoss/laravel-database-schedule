@@ -1,4 +1,4 @@
-![Laravel Database Schedule](https://banners.beyondco.de/Laravel%20Database%20Schedule.png?theme=light&packageManager=composer+require&packageName=robersonfaria%2Flaravel-database-schedule&pattern=architect&style=style_1&description=Schedule+your+tasks+through+a+dashboard+and+without+having+to+deploy+the+application.&md=1&showWatermark=1&fontSize=100px&images=calendar&widths=auto&heights=350)
+![Laravel Database Schedule](https://banners.beyondco.de/Laravel%20Database%20Schedule.png?theme=light&packageManager=composer+require&packageName=skarjoss%2Flaravel-database-schedule&pattern=architect&style=style_1&description=Schedule+your+tasks+through+a+dashboard+and+without+having+to+deploy+the+application.&md=1&showWatermark=1&fontSize=100px&images=calendar&widths=auto&heights=350)
 
 # Documentation
 
@@ -12,9 +12,14 @@ activated, inactivated or deleted via the interface without the need for a new a
 
 ![Show History Schedules](docs/show-history1.png)
 
+## Requirements
+
+- PHP 7.3+ (Laravel 13 requires PHP 8.3+)
+- Laravel 8.0 to 13.x
+
 ## Installation
 
-1. Run ```composer require robersonfaria/laravel-database-schedule```
+1. Run ```composer require skarjoss/laravel-database-schedule```
 2. Run ```php artisan migrate```
 
 ### Environment variables
@@ -36,7 +41,7 @@ php artisan vendor:publish --provider="RobersonFaria\DatabaseSchedule\DatabaseSc
 
 Dashboard Authorization exposes a dashboard at `/schedule` URI.
 
-In the configuration file it is possible to define whether to restrict access to route `/schedule`, the default is true. If access is restricted, the user must be logged in and meet the requirements defined in the `viewDatabaseSchedule` [gate controls access](https://laravel.com/docs/8.x/authorization#gates). 
+In the configuration file it is possible to define whether to restrict access to route `/schedule`, the default is true. If access is restricted, the user must be logged in and meet the requirements defined in the `viewDatabaseSchedule` [gate controls access](https://laravel.com/docs/13.x/authorization#gates). 
 
 ```php
 <?php
@@ -53,7 +58,7 @@ Note that this value can also be changed using the SCHEDULE_RESTRICTED_ACCESS en
 
 *ATTENTION:* if restricted_access is set to false, access to the `/ schedule` route will be public.
 
-You must define the gates in your service providers, laravel by default already brings the provider `App\Providers\AuthServiceProvider` for this purpose. See more in the Laravel documentation [https://laravel.com/docs/8.x/authorization#gates](https://laravel.com/docs/8.x/authorization#gates)
+You must define the gates in your service providers, laravel by default already brings the provider `App\Providers\AuthServiceProvider` for this purpose. See more in the Laravel documentation [https://laravel.com/docs/13.x/authorization#gates](https://laravel.com/docs/13.x/authorization#gates)
 
 You are free to modify this gate as needed to restrict access to your Database Schedule Dashboard.
 
@@ -154,7 +159,7 @@ php artisan schedule:run
 
 The console output will look like this
 ```bash
-Running scheduled command: ('/usr/bin/php7.4' 'artisan' command:test 1 '2022-02-02 00:00:00' '2022-04-02 00:00:00' > 'path/to/storage/logs/schedule-8763d2ce5a20ee888dd9d8a7e5a5cfcd4b315375.log' 2>&1 ;
+Running scheduled command: ('/usr/bin/php' 'artisan' command:test 1 '2022-02-02 00:00:00' '2022-04-02 00:00:00' > 'path/to/storage/logs/schedule-8763d2ce5a20ee888dd9d8a7e5a5cfcd4b315375.log' 2>&1 ;
 ```
 
 If you marked the sending of the output by email you will receive an email similar to this one:
@@ -171,11 +176,26 @@ $ php artisan schedule:list
 +----------------------------------------------------------------------------------------+-----------+-------------+----------------------------+
 | Command                                                                                | Interval  | Description | Next Due                   |
 +----------------------------------------------------------------------------------------+-----------+-------------+----------------------------+
-| '/usr/bin/php7.4' 'artisan' inspire                                                    | * * * * * |             | 2022-03-02 17:05:00 +00:00 |
-| '/usr/bin/php7.4' 'artisan' command:test 1 '2022-02-02 00:00:00' '2022-04-02 00:00:00' | * * * * * |             | 2022-03-02 17:05:00 +00:00 |
+| '/usr/bin/php' 'artisan' inspire                                                    | * * * * * |             | 2022-03-02 17:05:00 +00:00 |
+| '/usr/bin/php' 'artisan' command:test 1 '2022-02-02 00:00:00' '2022-04-02 00:00:00' | * * * * * |             | 2022-03-02 17:05:00 +00:00 |
 +----------------------------------------------------------------------------------------+-----------+-------------+----------------------------+
 ```
 
+
+## Testing your schedules
+
+The package ships a model factory for `RobersonFaria\DatabaseSchedule\Models\Schedule`, so you can create schedules in your own tests:
+
+```php
+use RobersonFaria\DatabaseSchedule\Models\Schedule;
+
+Schedule::factory()->create([
+    'command' => 'inspire',
+    'expression' => '* * * * *',
+]);
+
+Schedule::factory()->count(5)->create();
+```
 
 ## CHANGELOG
 

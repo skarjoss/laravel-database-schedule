@@ -1,6 +1,11 @@
 /vendor
 /.idea
 .DS_Store
+/composer.lock
 
 # php code sniffer
 .php_cs.cache
+
+# phpunit
+.phpunit.result.cache
+.phpunit.cache

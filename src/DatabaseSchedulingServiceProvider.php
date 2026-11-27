@@ -59,7 +59,7 @@ class DatabaseSchedulingServiceProvider extends DatabaseScheduleApplicationServi
             $model::observe(ScheduleObserver::class);
         }
 
-        if (substr(app()->version(), 0, 1) >= 8) {
+        if (version_compare(app()->version(), '8.0', '>=')) {
             \Illuminate\Pagination\Paginator::useBootstrap();
         }
 
